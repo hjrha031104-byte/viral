@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>인스타그램 바이럴 광고 대행사 사업계획서</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%; height: 100%; overflow: hidden;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #000;
+    color: #111;
+  }
+
+  /* Progress bar */
+  #progress-bar {
+    position: fixed; top: 0; left: 0; height: 3px;
+    background: #111; z-index: 1000;
+    transition: width 0.4s ease;
+  }
+
+  /* Slide container */
+  #slides-wrapper {
+    width: 100%; height: 100vh;
+    position: relative; overflow: hidden;
+  }
+
+  .slide {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.5s ease;
+    pointer-events: none;
+    overflow-y: auto;
+    background: #fff;
+  }
+
+  .slide.active {
+    opacity: 1; pointer-events: all;
+    z-index: 10;
+  }
+
+  .slide-inner {
+    width: 100%; max-width: 1200px;
+    padding: 60px 60px;
+    margin: auto;
+  }
+
+  /* Navigation */
+  #nav {
+    position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 20px; z-index: 1000;
+  }
+
+  .nav-btn {
+    background: #111; color: #fff;
+    border: none; cursor: pointer;
+    width: 44px; height: 44px; border-radius: 50%;
+    font-size: 18px; display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, transform 0.1s;
+    font-family: 'Pretendard', sans-serif;
+  }
+  .nav-btn:hover { background: #333; transform: scale(1.05); }
+  .nav-btn:disabled { background: #888; cursor: default; transform: none; }
+
+  #slide-counter {
+    font-size: 13px; font-weight: 500; color: #fff;
+    background: rgba(0,0,0,0.55); padding: 6px 14px; border-radius: 20px;
+    letter-spacing: 0.5px; min-width: 72px; text-align: center;
+    font-family: 'Pretendard', sans-serif;
+  }
+
+  /* ── TYPOGRAPHY ── */
+  .slide-number-label {
+    font-size: 12px; font-weight: 600; letter-spacing: 3px;
+    color: #888; text-transform: uppercase; margin-bottom: 12px;
+  }
+
+  h1.main-title {
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 800; color: #000; line-height: 1.1; letter-spacing: -1px;
+  }
+  h2.slide-title {
+    font-size: clamp(24px, 3.5vw, 40px);
+    font-weight: 700; color: #111; line-height: 1.2; letter-spacing: -0.5px;
+    padding-bottom: 14px; margin-bottom: 28px;
+    border-bottom: 2px solid #111;
+  }
+  h2.slide-title.no-border { border-bottom: none; margin-bottom: 20px; }
+  h3.card-title {
+    font-size: 16px; font-weight: 700; color: #111; margin-bottom: 10px;
+  }
+  p, li { font-size: 14px; color: #333; line-height: 1.8; }
+  .label { font-size: 12px; color: #888; font-weight: 500; }
+
+  /* ── CARDS ── */
+  .card {
+    border: 1px solid #e0e0e0; border-radius: 8px;
+    padding: 24px 28px; background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .card-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .card-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .card-grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; }
+
+  /* ── STAT BOX ── */
+  .stat-box {
+    border: 1px solid #e0e0e0; border-radius: 8px;
+    padding: 28px 24px; text-align: center; background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .stat-num {
+    font-size: clamp(28px, 3vw, 42px);
+    font-weight: 800; color: #000; line-height: 1.1; margin-bottom: 6px;
+  }
+  .stat-label { font-size: 13px; color: #555; font-weight: 500; line-height: 1.4; }
+
+  /* ── TABLES ── */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th {
+    background: #111; color: #fff; padding: 12px 14px;
+    font-weight: 600; text-align: center; font-size: 13px;
+  }
+  td { padding: 11px 14px; border-bottom: 1px solid #e0e0e0; text-align: center; color: #333; }
+  tr:nth-child(even) td { background: #f5f5f5; }
+  tr:nth-child(odd) td { background: #fff; }
+  tr:hover td { background: #f0f0f0; }
+  td:first-child { font-weight: 600; color: #111; text-align: left; }
+
+  /* ── TOC ── */
+  .toc-item {
+    display: flex; align-items: center; gap: 24px;
+    padding: 18px 0; border-bottom: 1px solid #e0e0e0;
+  }
+  .toc-item:last-child { border-bottom: none; }
+  .toc-num {
+    font-size: 32px; font-weight: 800; color: #e0e0e0; min-width: 60px;
+    line-height: 1; letter-spacing: -1px;
+  }
+  .toc-text { font-size: 18px; font-weight: 600; color: #111; }
+
+  /* ── COMP ANALYSIS ── */
+  .comp-header {
+    display: flex; align-items: flex-start; gap: 32px; margin-bottom: 28px;
+  }
+  .comp-big-num {
+    font-size: 96px; font-weight: 800; color: #f5f5f5; line-height: 1;
+    letter-spacing: -4px; flex-shrink: 0;
+  }
+  .comp-content { flex: 1; }
+  .comp-content h2.slide-title { margin-bottom: 16px; }
+  .info-row { display: flex; gap: 12px; margin-bottom: 8px; align-items: flex-start; }
+  .info-key { font-size: 12px; font-weight: 700; color: #888; min-width: 110px; padding-top: 1px; }
+  .info-val { font-size: 14px; color: #333; line-height: 1.6; }
+
+  /* ── BENCHMARK CARDS ── */
+  .bench-card {
+    border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px 22px;
+    background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .bench-handle { font-size: 15px; font-weight: 700; color: #000; margin-bottom: 4px; }
+  .bench-follower { font-size: 22px; font-weight: 800; color: #111; margin-bottom: 12px; }
+  .bench-row { display: flex; gap: 8px; margin-bottom: 6px; }
+  .bench-key { font-size: 11px; font-weight: 600; color: #888; min-width: 72px; }
+  .bench-val { font-size: 12px; color: #333; line-height: 1.5; }
+
+  /* ── CONTENT PILLARS ── */
+  .pillar { display: flex; gap: 18px; margin-bottom: 16px; align-items: flex-start; }
+  .pillar-num {
+    font-size: 28px; font-weight: 800; color: #e0e0e0; min-width: 36px; line-height: 1;
+  }
+  .pillar-body h4 { font-size: 15px; font-weight: 700; color: #111; margin-bottom: 4px; }
+  .pillar-body p { font-size: 13px; color: #555; line-height: 1.6; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .tag {
+    background: #f5f5f5; border: 1px solid #e0e0e0; border-radius: 20px;
+    padding: 4px 12px; font-size: 12px; color: #555; font-weight: 500;
+  }
+  .time-badge {
+    display: inline-block; background: #111; color: #fff;
+    padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; margin-right: 6px;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .tl-item { display: flex; gap: 0; }
+  .tl-left {
+    min-width: 130px; padding-right: 24px; text-align: right;
+    padding-top: 4px;
+  }
+  .tl-period { font-size: 13px; font-weight: 700; color: #888; }
+  .tl-spine { display: flex; flex-direction: column; align-items: center; margin-right: 24px; }
+  .tl-dot { width: 12px; height: 12px; border-radius: 50%; background: #111; flex-shrink: 0; }
+  .tl-line { flex: 1; width: 2px; background: #e0e0e0; }
+  .tl-item:last-child .tl-line { display: none; }
+  .tl-body { padding-bottom: 28px; flex: 1; }
+  .tl-body h4 { font-size: 15px; font-weight: 700; color: #111; margin-bottom: 8px; }
+  .tl-body ul { padding-left: 16px; }
+  .tl-body li { font-size: 13px; color: #555; line-height: 1.8; }
+
+  /* ── ROADMAP ── */
+  .roadmap-phase { margin-bottom: 20px; }
+  .phase-header { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+  .phase-badge {
+    background: #111; color: #fff; padding: 4px 14px; border-radius: 4px;
+    font-size: 12px; font-weight: 700; white-space: nowrap;
+  }
+  .phase-title { font-size: 18px; font-weight: 700; color: #111; }
+  .phase-body ul { padding-left: 20px; }
+  .phase-body li { font-size: 13px; color: #555; line-height: 1.8; }
+
+  /* ── KPI TABLE ── */
+  .kpi-table th:first-child { text-align: left; }
+  .kpi-table td:first-child { font-weight: 600; color: #111; text-align: left; }
+
+  /* ── INSIGHT BOX ── */
+  .insight-box {
+    background: #f5f5f5; border-left: 3px solid #111;
+    padding: 14px 20px; border-radius: 0 6px 6px 0; margin-bottom: 12px;
+  }
+  .insight-box h4 { font-size: 14px; font-weight: 700; color: #111; margin-bottom: 4px; }
+  .insight-box p { font-size: 13px; color: #555; }
+
+  /* ── VALUE PROPS ── */
+  .value-prop {
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;
+    background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .value-icon { font-size: 24px; }
+  .value-body h4 { font-size: 15px; font-weight: 700; color: #111; margin-bottom: 4px; }
+  .value-body p { font-size: 13px; color: #555; }
+
+  /* ── REFERENCE LIST ── */
+  .ref-item {
+    display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid #e0e0e0;
+    align-items: flex-start;
+  }
+  .ref-num { font-size: 12px; font-weight: 800; color: #888; min-width: 20px; padding-top: 2px; }
+  .ref-text { font-size: 14px; color: #333; line-height: 1.6; }
+  .ref-text strong { font-weight: 700; color: #111; }
+
+  /* ── COVER ── */
+  .cover-inner {
+    text-align: center; padding: 0 40px;
+  }
+  .cover-year {
+    font-size: 13px; font-weight: 600; letter-spacing: 4px;
+    color: #888; text-transform: uppercase; margin-bottom: 32px;
+  }
+  .cover-line { width: 48px; height: 3px; background: #111; margin: 24px auto; }
+  .cover-subtitle {
+    font-size: clamp(16px, 2vw, 22px); font-weight: 400; color: #555;
+    margin-top: 8px;
+  }
+
+  /* ── CLOSING ── */
+  .closing-inner { text-align: center; }
+  .closing-inner h1 { font-size: clamp(28px, 4vw, 52px); font-weight: 800; color: #000; margin-bottom: 16px; }
+  .closing-inner p { font-size: 16px; color: #555; margin-bottom: 40px; }
+  .value-props-grid { display: flex; flex-direction: column; gap: 12px; max-width: 640px; margin: 0 auto; }
+
+  /* ── SOURCE NOTE ── */
+  .source-note { margin-top: 20px; padding: 12px 16px; background: #f5f5f5; border-radius: 6px; }
+  .source-note p { font-size: 12px; color: #888; }
+
+  /* ── CHANNEL BOX ── */
+  .channel-box { border: 1px solid #e0e0e0; border-radius: 8px; padding: 22px 24px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .channel-box h3 { font-size: 16px; font-weight: 700; color: #111; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #e0e0e0; }
+  .channel-row { display: flex; gap: 8px; margin-bottom: 8px; }
+  .channel-key { font-size: 11px; font-weight: 600; color: #888; min-width: 80px; padding-top: 2px; }
+  .channel-val { font-size: 13px; color: #333; line-height: 1.5; }
+
+  /* ── STARS ── */
+  .stars { color: #111; font-size: 13px; letter-spacing: 1px; }
+
+  /* ── PRICING ── */
+  .price-table td:last-child { font-weight: 700; color: #111; }
+
+  /* ── DIFF BOX ── */
+  .diff-box {
+    background: #111; color: #fff; border-radius: 8px;
+    padding: 18px 24px; margin-top: 20px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .diff-box .diff-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #888; flex-shrink: 0; }
+  .diff-box .diff-text { font-size: 14px; font-weight: 600; color: #fff; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    .slide-inner { padding: 40px 24px 80px; }
+    .card-grid-3, .card-grid-4 { grid-template-columns: 1fr; }
+    .card-grid-2 { grid-template-columns: 1fr; }
+    .comp-big-num { font-size: 56px; }
+    .tl-left { min-width: 80px; }
+    h2.slide-title { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<div id="slides-wrapper">
+
+  <!-- SLIDE 1: COVER -->
+  <div class="slide active" id="slide-1">
+    <div class="slide-inner" style="display:flex;align-items:center;justify-content:center;min-height:100vh;">
+      <div class="cover-inner">
+        <div class="cover-year">2026</div>
+        <h1 class="main-title">인스타그램<br>바이럴 광고 대행사</h1>
+        <div class="cover-line"></div>
+        <p class="cover-subtitle">다채널 기반 바이럴 마케팅 솔루션</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: 목차 -->
+  <div class="slide" id="slide-2">
+    <div class="slide-inner">
+      <div class="slide-number-label">Contents</div>
+      <h2 class="slide-title">목차</h2>
+      <div class="toc-item">
+        <span class="toc-num">01</span>
+        <span class="toc-text">사업 소개</span>
+      </div>
+      <div class="toc-item">
+        <span class="toc-num">02</span>
+        <span class="toc-text">국내 바이럴 광고 대행사 현황</span>
+      </div>
+      <div class="toc-item">
+        <span class="toc-num">03</span>
+        <span class="toc-text">바이럴 소재 추천</span>
+      </div>
+      <div class="toc-item">
+        <span class="toc-num">04</span>
+        <span class="toc-text">벤치마킹 계정 분석</span>
+      </div>
+      <div class="toc-item">
+        <span class="toc-num">05</span>
+        <span class="toc-text">운영 가이드</span>
+      </div>
+      <div class="toc-item">
+        <span class="toc-num">06</span>
+        <span class="toc-text">목표 및 로드맵</span>
+      </div>
+      <p style="font-size:12px;color:#888;margin-top:20px;">* 근거 자료는 각 슬라이드 하단에 표기됩니다</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: 사업 소개 -->
+  <div class="slide" id="slide-3">
+    <div class="slide-inner">
+      <div class="slide-number-label">01 — 사업 소개</div>
+      <h2 class="slide-title">사업 소개</h2>
+      <div class="card-grid-2" style="gap:18px;">
+        <div class="card">
+          <h3 class="card-title">사업 개요</h3>
+          <p>인스타그램 다채널(F&amp;B, 뷰티/패션, 생활꿀팁) 운영을 통한 바이럴 광고 대행 서비스. 자체 보유 채널을 기반으로 광고주의 제품과 브랜드를 자연스럽게 노출하는 매거진형 광고 플랫폼을 구축합니다.</p>
+        </div>
+        <div class="card">
+          <h3 class="card-title">핵심 역량</h3>
+          <ul style="padding-left:16px;">
+            <li>자체 보유 채널 운영</li>
+            <li>바이럴 콘텐츠 기획 및 제작</li>
+            <li>광고주 연결 및 캠페인 관리</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 class="card-title">타겟 고객</h3>
+          <ul style="padding-left:16px;">
+            <li>소상공인 및 자영업자</li>
+            <li>뷰티 브랜드 (중소 코스메틱)</li>
+            <li>F&amp;B 업체 (카페, 레스토랑 등)</li>
+            <li>생활용품 브랜드</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 class="card-title">수익 모델</h3>
+          <ul style="padding-left:16px;">
+            <li>게시물당 광고비 (단건 계약)</li>
+            <li>패키지 광고 (피드+릴스 묶음)</li>
+            <li>장기 채널 운영 계약</li>
+            <li>브랜딩 파트너십</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: 한국 인스타그램 광고 시장 현황 -->
+  <div class="slide" id="slide-4">
+    <div class="slide-inner">
+      <div class="slide-number-label">02 — 시장 현황</div>
+      <h2 class="slide-title">한국 인스타그램 광고 시장 현황</h2>
+      <div class="card-grid-2" style="gap:18px; margin-bottom:18px;">
+        <div class="stat-box">
+          <div class="stat-num">2,200만</div>
+          <div class="stat-label">국내 인스타그램 MAU<br><span style="color:#888;font-size:12px;">2024년 기준</span></div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">1조 5천억원</div>
+          <div class="stat-label">인플루언서 마케팅 시장 규모<br><span style="color:#888;font-size:12px;">2024년 기준</span></div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">35%</div>
+          <div class="stat-label">SNS 광고비 중 인스타그램 비중<br><span style="color:#888;font-size:12px;">전체 SNS 광고 대비</span></div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">+15%</div>
+          <div class="stat-label">바이럴 마케팅 연평균 성장률<br><span style="color:#888;font-size:12px;">YoY 기준</span></div>
+        </div>
+      </div>
+      <div class="source-note">
+        <p>출처: Meta Business, 한국방송광고진흥공사, 나스미디어 2024 인터넷 이용자 조사</p>
+      </div>
+      <p style="font-size:11px;color:#aaa;margin-top:20px;border-top:1px solid #e0e0e0;padding-top:10px;">출처: Meta Business Suite 공식 통계 (2024) / 나스미디어 2024 인터넷 이용자 조사 / 한국방송광고진흥공사(KOBACO) / 대한상공회의소 SNS 마케팅 ROI 분석 보고서</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: 경쟁사 분석 아이엠와이즈 -->
+  <div class="slide" id="slide-5">
+    <div class="slide-inner">
+      <div class="slide-number-label">02 — 경쟁사 분석</div>
+      <div class="comp-header">
+        <div class="comp-big-num">01</div>
+        <div class="comp-content" style="flex:1;">
+          <h2 class="slide-title">경쟁사 분석 01 — 아이엠와이즈 (IMWISE)</h2>
+        </div>
+      </div>
+      <div class="card-grid-2" style="gap:16px;">
+        <div class="card">
+          <div class="info-row"><span class="info-key">설립연도</span><span class="info-val">2015년</span></div>
+          <div class="info-row"><span class="info-key">주요 서비스</span><span class="info-val">SNS 바이럴 마케팅, 인플루언서 매칭, 콘텐츠 제작</span></div>
+          <div class="info-row"><span class="info-key">보유 채널 수</span><span class="info-val">50개 이상 자체 SNS 채널</span></div>
+          <div class="info-row"><span class="info-key">주요 강점</span><span class="info-val">대형 광고주 다수 보유, 체계적인 데이터 기반 운영</span></div>
+        </div>
+        <div class="card">
+          <div class="info-row"><span class="info-key">차별화 포인트</span><span class="info-val">자체 플랫폼 'WISE'를 통한 캠페인 관리 시스템 구축</span></div>
+          <div style="margin-top:16px; padding:14px; background:#f5f5f5; border-radius:6px; border-left:3px solid #111;">
+            <p style="font-size:12px;font-weight:700;color:#888;margin-bottom:4px;">핵심 시사점</p>
+            <p style="font-size:14px;color:#111;font-weight:600;">자체 기술 플랫폼이 경쟁력의 핵심 — 데이터 기반 운영 체계 구축 필요</p>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:#aaa;margin-top:20px;border-top:1px solid #e0e0e0;padding-top:10px;">출처: 각사 공식 홈페이지 및 소개 자료 기반 분석</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: 경쟁사 분석 애딧 -->
+  <div class="slide" id="slide-6">
+    <div class="slide-inner">
+      <div class="slide-number-label">02 — 경쟁사 분석</div>
+      <div class="comp-header">
+        <div class="comp-big-num">02</div>
+        <div class="comp-content" style="flex:1;">
+          <h2 class="slide-title">경쟁사 분석 02 — 애딧 (ADDIT)</h2>
+        </div>
+      </div>
+      <div class="card-grid-2" style="gap:16px;">
+        <div class="card">
+          <div class="info-row"><span class="info-key">설립연도</span><span class="info-val">2018년</span></div>
+          <div class="info-row"><span class="info-key">주요 서비스</span><span class="info-val">인스타그램 바이럴, 블로그 체험단, 유튜브 마케팅</span></div>
+          <div class="info-row"><span class="info-key">특징</span><span class="info-val">중소기업 전문 합리적 가격대 패키지 운영</span></div>
+          <div class="info-row"><span class="info-key">주요 강점</span><span class="info-val">접근성 높은 가격 정책, 다양한 카테고리 소화 가능</span></div>
+        </div>
+        <div class="card">
+          <div style="padding:14px; background:#f5f5f5; border-radius:6px; border-left:3px solid #111;">
+            <p style="font-size:12px;font-weight:700;color:#888;margin-bottom:4px;">핵심 시사점</p>
+            <p style="font-size:14px;color:#111;font-weight:600;">중소 광고주 타겟팅 전략이 유효 — 진입 초기 중소기업 집중 공략 전략 적합</p>
+          </div>
+          <div style="margin-top:16px;">
+            <p class="label" style="margin-bottom:8px;">카테고리 커버리지</p>
+            <div class="tag-row">
+              <span class="tag">인스타그램 바이럴</span>
+              <span class="tag">블로그 체험단</span>
+              <span class="tag">유튜브 마케팅</span>
+              <span class="tag">중소기업 특화</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:#aaa;margin-top:20px;border-top:1px solid #e0e0e0;padding-top:10px;">출처: 각사 공식 홈페이지 및 소개 자료 기반 분석</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: 경쟁사 분석 인사이더그램컴퍼니 -->
+  <div class="slide" id="slide-7">
+    <div class="slide-inner">
+      <div class="slide-number-label">02 — 경쟁사 분석</div>
+      <div class="comp-header">
+        <div class="comp-big-num">03</div>
+        <div class="comp-content" style="flex:1;">
+          <h2 class="slide-title">경쟁사 분석 03 — 인사이더그램컴퍼니</h2>
+        </div>
+      </div>
+      <div class="card-grid-2" style="gap:16px;">
+        <div class="card">
+          <div class="info-row"><span class="info-key">주요 서비스</span><span class="info-val">인스타그램 전문 바이럴 마케팅</span></div>
+          <div class="info-row"><span class="info-key">특징</span><span class="info-val">인스타그램 특화, 팔로워 기반 자체 채널 운영</span></div>
+          <div class="info-row"><span class="info-key">주요 강점</span><span class="info-val">인스타그램 알고리즘 최적화 전문성 보유</span></div>
+        </div>
+        <div class="card">
+          <div style="padding:14px; background:#f5f5f5; border-radius:6px; border-left:3px solid #111;">
+            <p style="font-size:12px;font-weight:700;color:#888;margin-bottom:4px;">핵심 시사점</p>
+            <p style="font-size:14px;color:#111;font-weight:600;">플랫폼 전문화가 신뢰도 향상에 기여 — 인스타그램 전문성을 전면에 내세우는 포지셔닝 중요</p>
+          </div>
+          <div style="margin-top:16px;">
+            <p class="label" style="margin-bottom:8px;">전문 영역</p>
+            <div class="tag-row">
+              <span class="tag">알고리즘 최적화</span>
+              <span class="tag">자체 채널 보유</span>
+              <span class="tag">인스타그램 특화</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:#aaa;margin-top:20px;border-top:1px solid #e0e0e0;padding-top:10px;">출처: 각사 공식 홈페이지 및 소개 자료 기반 분석</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: 경쟁사 분석 피어그라운드 -->
+  <div class="slide" id="slide-8">
+    <div class="slide-inner">
+      <div class="slide-number-label">02 — 경쟁사 분석</div>
+      <div class="comp-header">
+        <div class="comp-big-num">04</div>
+        <div class="comp-content" style="flex:1;">
+          <h2 class="slide-title">경쟁사 분석 04 — 피어그라운드 (PEERGROUND)</h2>
+        </div>
+      </div>
+      <div class="card-grid-2" style="gap:16px;">
+        <div class="card">
+          <div class="info-row"><span class="info-key">주요 서비스</span><span class="info-val">인플루언서 매칭 플랫폼, 바이럴 마케팅</span></div>
+          <div class="info-row"><span class="info-key">특징</span><span class="info-val">마이크로 인플루언서 전문, 진정성 마케팅</span></div>
+          <div class="info-row"><span class="info-key">주요 강점</span><span class="info-val">광고주-인플루언서 직거래 플랫폼 운영</span></div>
+        </div>
+        <div class="card">
+          <div style="padding:14px; background:#f5f5f5; border-radius:6px; border-left:3px solid #111;">
+            <p style="font-size:12px;font-weight:700;color:#888;margin-bottom:4px;">핵심 시사점</p>
+            <p style="font-size:14px;color:#111;font-weight:600;">마이크로 인플루언서 활용이 높은 ROI 창출 — 팔로워 10만 이하 채널도 충분한 광고 효과 가능</p>
+          </div>
+          <div style="margin-top:16px;">
+            <p class="label" style="margin-bottom:8px;">플랫폼 특징</p>
+            <div class="tag-row">
+              <span class="tag">마이크로 인플루언서</span>
+              <span class="tag">직거래 플랫폼</span>
+              <span class="tag">진정성 마케팅</span>
+              <span class="tag">높은 ROI</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:#aaa;margin-top:20px;border-top:1px solid #e0e0e0;padding-top:10px;">출처: 각사 공식 홈페이지 및 소개 자료 기반 분석</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: 경쟁사 종합 분석 -->
+  <div class="slide" id="slide-9">
+    <div class="slide-inner">
+      <div class="slide-number-label">02 — 경쟁사 종합</div>
+      <h2 class="slide-title">경쟁사 종합 분석 및 포지셔닝</h2>
+      <div style="overflow-x:auto; margin-bottom:20px;">
+        <table>
+          <thead>
+            <tr>
+              <th style="text-align:left;">구분</th>
+              <th>아이엠와이즈</th>
+              <th>애딧</th>
+              <th>인사이더그램</th>
+              <th>피어그라운드</th>
+              <th style="background:#333;">우리</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>채널 보유</td>
+              <td><span class="stars">★★★★★</span></td>
+              <td><span class="stars">★★★</span></td>
+              <td><span class="stars">★★★★</span></td>
+              <td><span class="stars">★★</span></td>
+              <td style="font-weight:700;color:#111;"><span class="stars">★★</span><br><span style="font-size:11px;color:#888;">(목표)</span></td>
+            </tr>
+            <tr>
+              <td>가격 경쟁력</td>
+              <td><span class="stars">★★</span></td>
+              <td><span class="stars">★★★★★</span></td>
+              <td><span class="stars">★★★</span></td>
+              <td><span class="stars">★★★★</span></td>
+              <td style="font-weight:700;"><span class="stars">★★★★★</span></td>
+            </tr>
+            <tr>
+              <td>전문성</td>
+              <td><span class="stars">★★★★</span></td>
+              <td><span class="stars">★★★</span></td>
+              <td><span class="stars">★★★★★</span></td>
+              <td><span class="stars">★★★</span></td>
+              <td style="font-weight:700;"><span class="stars">★★★★</span></td>
+            </tr>
+            <tr>
+              <td>성장성</td>
+              <td><span class="stars">★★★</span></td>
+              <td><span class="stars">★★★</span></td>
+              <td><span class="stars">★★★★</span></td>
+              <td><span class="stars">★★★★</span></td>
+              <td style="font-weight:700;"><span class="stars">★★★★★</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="diff-box">
+        <span class="diff-label">차별화 전략</span>
+        <span class="diff-text">자체 매거진 채널 3개 카테고리 동시 운영 + 합리적 가격 + 초기부터 데이터 기반 성과 측정 체계 구축</span>
+      </div>
+      <p style="font-size:11px;color:#aaa;margin-top:20px;border-top:1px solid #e0e0e0;padding-top:10px;">출처: 각사 공식 홈페이지 및 소개 자료 기반 분석</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: 바이럴 소재 F&B -->
+  <div class="slide" id="slide-10">
+    <div class="slide-inner">
+      <div class="slide-number-label">03 — 바이럴 소재 추천</div>
+      <h2 class="slide-title">바이럴 소재 추천 — F&amp;B</h2>
+      <div style="margin-bottom:24px;">
+        <div class="pillar">
+          <div class="pillar-num">01</div>
+          <div class="pillar-body">
+            <h4>핫플레이스 맛집 탐방</h4>
+            <p>"OO동 숨은 맛집 TOP5" 형식 콘텐츠 — 위치 태그와 메뉴 사진 중심으로 저장 유도. 지역별 탐방 시리즈로 연속 콘텐츠 구성 가능.</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-num">02</div>
+          <div class="pillar-body">
+            <h4>신메뉴 / 한정 메뉴 소개</h4>
+            <p>출시 직후 빠른 리뷰로 정보성 콘텐츠 선점. 한정 수량·시즌 메뉴의 희소성을 강조하여 즉각적인 방문 유도.</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-num">03</div>
+          <div class="pillar-body">
+            <h4>먹방 릴스</h4>
+            <p>15-30초 분량의 먹는 장면 클로즈업 편집. ASMR 사운드 요소 포함으로 몰입감 극대화. 반복 재생 유도 편집 필수.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="background:#f5f5f5;">
+        <div style="display:flex; gap:32px; flex-wrap:wrap;">
+          <div>
+            <p class="label" style="margin-bottom:8px;">효과적인 해시태그</p>
+            <div class="tag-row">
+              <span class="tag">#맛집</span>
+              <span class="tag">#서울맛집</span>
+              <span class="tag">#핫플</span>
+              <span class="tag">#먹스타그램</span>
+              <span class="tag">#오늘뭐먹지</span>
+            </div>
+          </div>
+          <div>
+            <p class="label" style="margin-bottom:8px;">업로드 최적 시간</p>
+            <span class="time-badge">11:00 – 12:00</span>
+            <span class="time-badge">18:00 – 20:00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 11: 바이럴 소재 뷰티/패션 -->
+  <div class="slide" id="slide-11">
+    <div class="slide-inner">
+      <div class="slide-number-label">03 — 바이럴 소재 추천</div>
+      <h2 class="slide-title">바이럴 소재 추천 — 뷰티/패션</h2>
+      <div style="margin-bottom:24px;">
+        <div class="pillar">
+          <div class="pillar-num">01</div>
+          <div class="pillar-body">
+            <h4>Before &amp; After 변신 콘텐츠</h4>
+            <p>메이크업/스타일링 전후 비교 콘텐츠. 극적인 변화를 짧은 릴스로 구성하여 저장 및 공유율 극대화. 시청자 궁금증 유발 편집 기법 적용.</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-num">02</div>
+          <div class="pillar-body">
+            <h4>제품 언박싱 + 리뷰</h4>
+            <p>신제품 빠른 리뷰로 정보 선점. 가성비 제품 소개로 저장·공유 유도. 실사용 후기 중심 신뢰도 높은 콘텐츠 제작.</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-num">03</div>
+          <div class="pillar-body">
+            <h4>코디 추천</h4>
+            <p>계절별/상황별(데일리, 데이트, 오피스 등) 코디 콘텐츠. 쇼핑몰 태그 및 구매 링크 연결로 전환율 제고.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="background:#f5f5f5;">
+        <div style="display:flex; gap:32px; flex-wrap:wrap;">
+          <div>
+            <p class="label" style="margin-bottom:8px;">효과적인 해시태그</p>
+            <div class="tag-row">
+              <span class="tag">#뷰티</span>
+              <span class="tag">#메이크업</span>
+              <span class="tag">#오오티디</span>
+              <span class="tag">#패션</span>
+              <span class="tag">#코디추천</span>
+            </div>
+          </div>
+          <div>
+            <p class="label" style="margin-bottom:8px;">업로드 최적 시간</p>
+            <span class="time-badge">8:00 – 9:00</span>
+            <span class="time-badge">20:00 – 22:00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 12: 바이럴 소재 생활꿀팁 -->
+  <div class="slide" id="slide-12">
+    <div class="slide-inner">
+      <div class="slide-number-label">03 — 바이럴 소재 추천</div>
+      <h2 class="slide-title">바이럴 소재 추천 — 생활꿀팁</h2>
+      <div style="margin-bottom:24px;">
+        <div class="pillar">
+          <div class="pillar-num">01</div>
+          <div class="pillar-body">
+            <h4>정보성 카드뉴스</h4>
+            <p>"몰랐던 OO 꿀팁 5가지" 형식 저장 유도 콘텐츠. 깔끔한 인포그래픽 디자인으로 정보 전달 최적화. 저장률 높은 실용 정보 중심 구성.</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-num">02</div>
+          <div class="pillar-body">
+            <h4>DIY / 홈인테리어</h4>
+            <p>쉽게 따라할 수 있는 생활 아이디어 콘텐츠. 비용 대비 효과가 뚜렷한 인테리어 팁으로 공유율 극대화. 단계별 과정 릴스 제작.</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-num">03</div>
+          <div class="pillar-body">
+            <h4>절약 / 재테크 팁</h4>
+            <p>실용적 금전 절약 정보로 저장률 극대화. 월별 절약 챌린지 등 참여 유도 콘텐츠. 팔로워의 일상과 연결되는 콘텐츠로 충성도 향상.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="background:#f5f5f5;">
+        <div style="display:flex; gap:32px; flex-wrap:wrap;">
+          <div>
+            <p class="label" style="margin-bottom:8px;">효과적인 해시태그</p>
+            <div class="tag-row">
+              <span class="tag">#생활꿀팁</span>
+              <span class="tag">#살림꿀팁</span>
+              <span class="tag">#인테리어</span>
+              <span class="tag">#절약</span>
+              <span class="tag">#꿀팁</span>
+            </div>
+          </div>
+          <div>
+            <p class="label" style="margin-bottom:8px;">업로드 최적 시간</p>
+            <span class="time-badge">7:00 – 9:00</span>
+            <span class="time-badge">21:00 – 23:00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 13: 벤치마킹 1 핫플레이스 -->
+  <div class="slide" id="slide-13">
+    <div class="slide-inner">
+      <div class="slide-number-label">04 — 벤치마킹 계정 분석</div>
+      <h2 class="slide-title">벤치마킹 계정 분석 01 — 핫플레이스 카테고리</h2>
+      <div class="card-grid-3">
+        <div class="card" style="display:flex;flex-direction:column;gap:4px;">
+          <div style="margin-bottom:6px;">
+            <div style="font-weight:700;font-size:15px;color:#111;">@_seoulhotplace</div>
+            <div style="font-size:12px;color:#888;">서울 핫플레이스</div>
+          </div>
+          <img src="images/_seoulhotplace.PNG" style="width:100%;max-height:280px;object-fit:contain;border-radius:6px;border:1px solid #e0e0e0;background:#f5f5f5;margin-bottom:8px;" onerror="this.style.display='none'">
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">팔로워</span><span class="info-val">703,124</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">전체 게시물</span><span class="info-val">5,977</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">업로드 주기</span><span class="info-val">하루 약 8개</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">마지막 업로드</span><span class="info-val">2026-11-03</span></div>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;gap:4px;">
+          <div style="margin-bottom:6px;">
+            <div style="font-weight:700;font-size:15px;color:#111;">@hotplenow</div>
+            <div style="font-size:12px;color:#888;">지금핫플</div>
+          </div>
+          <img src="images/hotplenow.PNG" style="width:100%;max-height:280px;object-fit:contain;border-radius:6px;border:1px solid #e0e0e0;background:#f5f5f5;margin-bottom:8px;" onerror="this.style.display='none'">
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">팔로워</span><span class="info-val">421,428</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">전체 게시물</span><span class="info-val">2,198</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">업로드 주기</span><span class="info-val">하루 약 8개</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">마지막 업로드</span><span class="info-val">2026-11-03</span></div>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;gap:4px;">
+          <div style="margin-bottom:6px;">
+            <div style="font-weight:700;font-size:15px;color:#111;">@instahotple</div>
+            <div style="font-size:12px;color:#888;">요즘핫플</div>
+          </div>
+          <img src="images/instahotple.PNG" style="width:100%;max-height:280px;object-fit:contain;border-radius:6px;border:1px solid #e0e0e0;background:#f5f5f5;margin-bottom:8px;" onerror="this.style.display='none'">
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">팔로워</span><span class="info-val">303,697</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">전체 게시물</span><span class="info-val">3,024</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">업로드 주기</span><span class="info-val">하루 약 8개</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">마지막 업로드</span><span class="info-val">2026-11-03</span></div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:#aaa;margin-top:20px;border-top:1px solid #e0e0e0;padding-top:10px;">출처: Apify Instagram Profile Scraper 수집 (기준일: 2026-11-03, 비용 약 $0.03) / 업로드 주기는 최근 게시물 약 12개 날짜 기준, 고정 게시물 제외</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 14: 벤치마킹 2 F&B -->
+  <div class="slide" id="slide-14">
+    <div class="slide-inner">
+      <div class="slide-number-label">04 — 벤치마킹 계정 분석</div>
+      <h2 class="slide-title">벤치마킹 계정 분석 02 — F&amp;B / 먹방 카테고리</h2>
+      <div class="card-grid-3">
+        <div class="card" style="display:flex;flex-direction:column;gap:4px;">
+          <div style="margin-bottom:6px;">
+            <div style="font-weight:700;font-size:15px;color:#111;">@mukbab2_</div>
+            <div style="font-size:12px;color:#888;">먹밥이</div>
+          </div>
+          <img src="images/mukbab2_.PNG" style="width:100%;max-height:280px;object-fit:contain;border-radius:6px;border:1px solid #e0e0e0;background:#f5f5f5;margin-bottom:8px;" onerror="this.style.display='none'">
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">팔로워</span><span class="info-val">36,635</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">전체 게시물</span><span class="info-val">1,114</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">업로드 주기</span><span class="info-val">하루 약 2개</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">마지막 업로드</span><span class="info-val">2026-11-02</span></div>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;gap:4px;">
+          <div style="margin-bottom:6px;">
+            <div style="font-weight:700;font-size:15px;color:#111;">@100_kkakka_jeon</div>
+            <div style="font-size:12px;color:#888;">백과자전</div>
+          </div>
+          <img src="images/100_kkakka_jeon.PNG" style="width:100%;max-height:280px;object-fit:contain;border-radius:6px;border:1px solid #e0e0e0;background:#f5f5f5;margin-bottom:8px;" onerror="this.style.display='none'">
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">팔로워</span><span class="info-val">7,563</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">전체 게시물</span><span class="info-val">1,375</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">업로드 주기</span><span class="info-val">하루 1~2개</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">마지막 업로드</span><span class="info-val">2026-11-03</span></div>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;gap:4px;">
+          <div style="margin-bottom:6px;">
+            <div style="font-weight:700;font-size:15px;color:#111;">@a.b.c_magazine</div>
+            <div style="font-size:12px;color:#888;">ABC 매거진, 빵·디저트</div>
+          </div>
+          <img src="images/a.b.c_magazine.PNG" style="width:100%;max-height:280px;object-fit:contain;border-radius:6px;border:1px solid #e0e0e0;background:#f5f5f5;margin-bottom:8px;" onerror="this.style.display='none'">
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">팔로워</span><span class="info-val">7,943</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">전체 게시물</span><span class="info-val">186</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">업로드 주기</span><span class="info-val">주 1~2개 (평균 5일 간격)</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">마지막 업로드</span><span class="info-val">2026-10-26</span></div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:#aaa;margin-top:20px;border-top:1px solid #e0e0e0;padding-top:10px;">출처: Apify Instagram Profile Scraper 수집 (기준일: 2026-11-03, 비용 약 $0.03) / 업로드 주기는 최근 게시물 약 12개 날짜 기준, 고정 게시물 제외</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 15: 벤치마킹 3 뷰티 -->
+  <div class="slide" id="slide-15">
+    <div class="slide-inner">
+      <div class="slide-number-label">04 — 벤치마킹 계정 분석</div>
+      <h2 class="slide-title">벤치마킹 계정 분석 03 — 뷰티/라이프스타일 카테고리</h2>
+      <div class="card-grid-3">
+        <div class="card" style="display:flex;flex-direction:column;gap:4px;">
+          <div style="margin-bottom:6px;">
+            <div style="font-weight:700;font-size:15px;color:#111;">@beauty_minhee</div>
+            <div style="font-size:12px;color:#888;">민희 뷰티</div>
+          </div>
+          <img src="images/beauty_minhee.PNG" style="width:100%;max-height:280px;object-fit:contain;border-radius:6px;border:1px solid #e0e0e0;background:#f5f5f5;margin-bottom:8px;" onerror="this.style.display='none'">
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">팔로워</span><span class="info-val">104,713</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">전체 게시물</span><span class="info-val">229</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">업로드 주기</span><span class="info-val">주 1~2개 (평균 4.6일 간격)</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">마지막 업로드</span><span class="info-val">2026-11-03</span></div>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;gap:4px;">
+          <div style="margin-bottom:6px;">
+            <div style="font-weight:700;font-size:15px;color:#111;">@nsteady_kr</div>
+            <div style="font-size:12px;color:#888;">엔스테디, 패션 매거진</div>
+          </div>
+          <img src="images/nsteady_kr.PNG" style="width:100%;max-height:280px;object-fit:contain;border-radius:6px;border:1px solid #e0e0e0;background:#f5f5f5;margin-bottom:8px;" onerror="this.style.display='none'">
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">팔로워</span><span class="info-val">78,644</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">전체 게시물</span><span class="info-val">908</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">업로드 주기</span><span class="info-val">하루 약 1개</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">마지막 업로드</span><span class="info-val">2026-11-03</span></div>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;gap:4px;">
+          <div style="margin-bottom:6px;">
+            <div style="font-weight:700;font-size:15px;color:#111;">@one.drop_beauty</div>
+            <div style="font-size:12px;color:#888;">원드랍 뷰티</div>
+          </div>
+          <img src="images/one.drop_beauty.PNG" style="width:100%;max-height:280px;object-fit:contain;border-radius:6px;border:1px solid #e0e0e0;background:#f5f5f5;margin-bottom:8px;" onerror="this.style.display='none'">
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">팔로워</span><span class="info-val">22,873</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">전체 게시물</span><span class="info-val">362</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">업로드 주기</span><span class="info-val">열흘에 1개 (평균 11일 간격)</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">마지막 업로드</span><span class="info-val">2026-10-31</span></div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:#aaa;margin-top:20px;border-top:1px solid #e0e0e0;padding-top:10px;">출처: Apify Instagram Profile Scraper 수집 (기준일: 2026-11-03, 비용 약 $0.03) / 업로드 주기는 최근 게시물 약 12개 날짜 기준, 고정 게시물 제외</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 16: 벤치마킹 4 라이프스타일 -->
+  <div class="slide" id="slide-16">
+    <div class="slide-inner">
+      <div class="slide-number-label">04 — 벤치마킹 계정 분석</div>
+      <h2 class="slide-title">벤치마킹 계정 분석 04 — 라이프스타일/서울로그</h2>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px; max-width:1400px; margin:0 auto 16px;">
+        <div class="card" style="display:flex;flex-direction:column;gap:4px;">
+          <div style="margin-bottom:6px;">
+            <div style="font-weight:700;font-size:15px;color:#111;">@seoul__log</div>
+            <div style="font-size:12px;color:#888;">서울로그</div>
+          </div>
+          <img src="images/seoul__log.PNG" style="width:100%;max-height:280px;object-fit:contain;border-radius:6px;border:1px solid #e0e0e0;background:#f5f5f5;margin-bottom:8px;" onerror="this.style.display='none'">
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">팔로워</span><span class="info-val">51,563</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">전체 게시물</span><span class="info-val">900</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">업로드 주기</span><span class="info-val">거의 매일 (주 약 6개)</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">마지막 업로드</span><span class="info-val">2026-11-03</span></div>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;gap:4px;">
+          <div style="margin-bottom:6px;">
+            <div style="font-weight:700;font-size:15px;color:#111;">@loverunlive_</div>
+            <div style="font-size:12px;color:#888;">뀸한</div>
+          </div>
+          <img src="images/loverunlive_.PNG" style="width:100%;max-height:280px;object-fit:contain;border-radius:6px;border:1px solid #e0e0e0;background:#f5f5f5;margin-bottom:8px;" onerror="this.style.display='none'">
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">팔로워</span><span class="info-val">2,287</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">전체 게시물</span><span class="info-val">8</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">업로드 주기</span><span class="info-val">활동 중단</span></div>
+          <div class="info-row" style="margin-bottom:2px;"><span class="info-key">마지막 업로드</span><span class="info-val">2025-04-07</span></div>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding:14px 18px;background:#f5f5f5;border-radius:6px;border-left:3px solid #111;">
+        <p style="font-size:13px;color:#333;"><strong>인사이트:</strong> @loverunlive_는 게시물 8개, 2025년 4월 이후 업로드 없음 — 활동 중단 상태. 운영 지속성이 채널 성장의 핵심임을 보여주는 반면교사 사례.</p>
+      </div>
+      <p style="font-size:11px;color:#aaa;margin-top:20px;border-top:1px solid #e0e0e0;padding-top:10px;">출처: Apify Instagram Profile Scraper 수집 (기준일: 2026-11-03, 비용 약 $0.03) / 업로드 주기는 최근 게시물 약 12개 날짜 기준, 고정 게시물 제외</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 17: 계정 분석 종합 인사이트 -->
+  <div class="slide" id="slide-17">
+    <div class="slide-inner">
+      <div class="slide-number-label">04 — 계정 분석 종합</div>
+      <h2 class="slide-title">계정 분석 종합 인사이트</h2>
+      <div class="card-grid-2" style="gap:16px; margin-bottom:20px;">
+        <div class="insight-box">
+          <h4>운영 유형 분류</h4>
+          <p>물량형(대형): _seoulhotplace·hotplenow·instahotple — 하루 8개, 팔로워 30만~70만<br>중형 꾸준형: nsteady_kr·seoul__log·mukbab2_ — 하루 1~2개, 팔로워 3~8만<br>고효율 저빈도: beauty_minhee — 게시물 229개, 팔로워 104,713명 (게시물당 팔로워 약 457명)</p>
+        </div>
+        <div class="insight-box">
+          <h4>업로드 주기와 팔로워의 관계</h4>
+          <p>물량형이 팔로워 수 최상위 / 하지만 beauty_minhee처럼 게시물 229개로 10만+ 달성 사례 존재<br>→ 콘텐츠 퀄리티가 물량을 이길 수 있다</p>
+        </div>
+        <div class="insight-box">
+          <h4>주목할 지표</h4>
+          <p>beauty_minhee: 게시물당 팔로워 457명 (최고 효율)<br>_seoulhotplace: 게시물당 팔로워 117명<br>loverunlive_: 게시물 8개, 활동 중단 → 지속성이 핵심</p>
+        </div>
+        <div class="insight-box">
+          <h4>우리 채널 전략 시사점</h4>
+          <p>초기: 주 4~6회 꾸준한 업로드로 알고리즘 신뢰 확보<br>중기: 퀄리티 강화로 게시물당 효율 극대화 (beauty_minhee 모델 참고)<br>loverunlive_ 사례처럼 중단 없는 운영 지속성이 필수</p>
+        </div>
+      </div>
+      <div class="diff-box">
+        <span class="diff-label">우리 채널 적용</span>
+        <span class="diff-text">위 인사이트를 기반으로 3개 채널 운영 가이드 수립 → 초기부터 검증된 전략 적용으로 성장 가속화</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 18: 운영 가이드 채널 전략 -->
+  <div class="slide" id="slide-18">
+    <div class="slide-inner">
+      <div class="slide-number-label">05 — 운영 가이드</div>
+      <h2 class="slide-title">운영 가이드 — 채널 전략</h2>
+      <div class="card-grid-3">
+        <div class="channel-box">
+          <h3>F&amp;B 채널</h3>
+          <div class="channel-row"><span class="channel-key">톤앤매너</span><span class="channel-val">활기차고 군침 도는 무드</span></div>
+          <div class="channel-row"><span class="channel-key">주요 포맷</span><span class="channel-val">릴스 50%, 캐러셀 40%, 피드 10%</span></div>
+          <div class="channel-row"><span class="channel-key">업로드</span><span class="channel-val">주 5회 (화/수/목/금/토)</span></div>
+          <div class="channel-row"><span class="channel-key">타겟층</span><span class="channel-val">20-35세, 맛집 탐방 관심층</span></div>
+          <div style="margin-top:12px;">
+            <div class="tag-row">
+              <span class="tag">맛집</span><span class="tag">핫플</span><span class="tag">먹방</span>
+            </div>
+          </div>
+        </div>
+        <div class="channel-box">
+          <h3>뷰티/패션 채널</h3>
+          <div class="channel-row"><span class="channel-key">톤앤매너</span><span class="channel-val">트렌디하고 세련된 무드</span></div>
+          <div class="channel-row"><span class="channel-key">주요 포맷</span><span class="channel-val">릴스 60%, 캐러셀 30%, 피드 10%</span></div>
+          <div class="channel-row"><span class="channel-key">업로드</span><span class="channel-val">주 5회 (월/화/목/금/일)</span></div>
+          <div class="channel-row"><span class="channel-key">타겟층</span><span class="channel-val">18-30세 여성, 뷰티 관심층</span></div>
+          <div style="margin-top:12px;">
+            <div class="tag-row">
+              <span class="tag">뷰티</span><span class="tag">패션</span><span class="tag">코디</span>
+            </div>
+          </div>
+        </div>
+        <div class="channel-box">
+          <h3>생활꿀팁 채널</h3>
+          <div class="channel-row"><span class="channel-key">톤앤매너</span><span class="channel-val">깔끔하고 정보성 강한 무드</span></div>
+          <div class="channel-row"><span class="channel-key">주요 포맷</span><span class="channel-val">캐러셀 60%, 릴스 30%, 피드 10%</span></div>
+          <div class="channel-row"><span class="channel-key">업로드</span><span class="channel-val">주 4회 (월/수/금/일)</span></div>
+          <div class="channel-row"><span class="channel-key">타겟층</span><span class="channel-val">25-40세, 실용 정보 추구층</span></div>
+          <div style="margin-top:12px;">
+            <div class="tag-row">
+              <span class="tag">꿀팁</span><span class="tag">살림</span><span class="tag">절약</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 19: 운영 가이드 콘텐츠 캘린더 -->
+  <div class="slide" id="slide-19">
+    <div class="slide-inner">
+      <div class="slide-number-label">05 — 운영 가이드</div>
+      <h2 class="slide-title">운영 가이드 — 월간 콘텐츠 캘린더</h2>
+      <div style="overflow-x:auto; margin-bottom:20px;">
+        <table>
+          <thead>
+            <tr>
+              <th style="text-align:left;min-width:60px;">주차</th>
+              <th style="min-width:160px;">F&amp;B</th>
+              <th style="min-width:160px;">뷰티/패션</th>
+              <th style="min-width:160px;">생활꿀팁</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1주차</td>
+              <td>이달의 핫 맛집 TOP5</td>
+              <td>이달의 트렌드 코디</td>
+              <td>월초 절약 꿀팁</td>
+            </tr>
+            <tr>
+              <td>2주차</td>
+              <td>숨은 맛집 탐방 릴스</td>
+              <td>신제품 언박싱 리뷰</td>
+              <td>집정리 꿀팁</td>
+            </tr>
+            <tr>
+              <td>3주차</td>
+              <td style="font-weight:700;color:#111;">광고주 콜라보 콘텐츠</td>
+              <td style="font-weight:700;color:#111;">광고주 뷰티 리뷰</td>
+              <td style="font-weight:700;color:#111;">광고주 생활용품</td>
+            </tr>
+            <tr>
+              <td>4주차</td>
+              <td>팔로워 추천 맛집</td>
+              <td>이달의 뷰티 픽</td>
+              <td>이달의 꿀팁 모음</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="background:#f5f5f5; border-left:3px solid #111; padding:14px 20px; border-radius:0 6px 6px 0;">
+        <p style="font-size:13px;color:#555;"><strong style="color:#111;">3주차는 광고주 콘텐츠</strong>로 자연스럽게 바이럴 광고 노출 — 월 1회 정기 광고 슬롯으로 광고주에게 안정적 노출 보장</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 20: 운영 가이드 KPI -->
+  <div class="slide" id="slide-20">
+    <div class="slide-inner">
+      <div class="slide-number-label">05 — 운영 가이드</div>
+      <h2 class="slide-title">운영 가이드 — KPI 지표</h2>
+      <div style="overflow-x:auto;">
+        <table class="kpi-table">
+          <thead>
+            <tr>
+              <th style="text-align:left;">지표</th>
+              <th>초기<br><span style="font-weight:400;font-size:11px;">(0-3개월)</span></th>
+              <th>성장기<br><span style="font-weight:400;font-size:11px;">(3-6개월)</span></th>
+              <th>광고 개시<br><span style="font-weight:400;font-size:11px;">(6개월~)</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>팔로워 수 (채널당)</td>
+              <td>1,000명</td>
+              <td>5,000명</td>
+              <td>10,000명+</td>
+            </tr>
+            <tr>
+              <td>게시물 도달률</td>
+              <td>5-10%</td>
+              <td>10-15%</td>
+              <td>15%+</td>
+            </tr>
+            <tr>
+              <td>저장률</td>
+              <td>3-5%</td>
+              <td>5-8%</td>
+              <td>8%+</td>
+            </tr>
+            <tr>
+              <td>참여율 (좋아요+댓글)</td>
+              <td>3-5%</td>
+              <td>5-7%</td>
+              <td>7%+</td>
+            </tr>
+            <tr>
+              <td>광고 문의 건수</td>
+              <td>—</td>
+              <td>월 1-2건</td>
+              <td>월 5건+</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:20px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+        <div style="text-align:center; padding:16px; background:#f5f5f5; border-radius:6px;">
+          <div style="font-size:12px;color:#888;margin-bottom:4px;">측정 주기</div>
+          <div style="font-size:16px;font-weight:700;color:#111;">주 1회</div>
+          <div style="font-size:12px;color:#555;">인사이트 체크</div>
+        </div>
+        <div style="text-align:center; padding:16px; background:#f5f5f5; border-radius:6px;">
+          <div style="font-size:12px;color:#888;margin-bottom:4px;">보고 주기</div>
+          <div style="font-size:16px;font-weight:700;color:#111;">월 1회</div>
+          <div style="font-size:12px;color:#555;">성과 리포트</div>
+        </div>
+        <div style="text-align:center; padding:16px; background:#f5f5f5; border-radius:6px;">
+          <div style="font-size:12px;color:#888;margin-bottom:4px;">전략 수정</div>
+          <div style="font-size:16px;font-weight:700;color:#111;">분기 1회</div>
+          <div style="font-size:12px;color:#555;">콘텐츠 전략 리뷰</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 21: 1차 목표 -->
+  <div class="slide" id="slide-21">
+    <div class="slide-inner">
+      <div class="slide-number-label">06 — 목표 및 로드맵</div>
+      <h2 class="slide-title">1차 목표 — 채널 구축 및 팔로워 성장 (0-6개월)</h2>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-left"><span class="tl-period">1-2개월</span></div>
+          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div class="tl-body">
+            <h4>계정 개설 및 피드 구성</h4>
+            <ul>
+              <li>F&amp;B, 뷰티/패션, 생활꿀팁 3개 매거진 계정 개설</li>
+              <li>피드 무드보드 설정 및 10개 이상 초기 콘텐츠 업로드</li>
+              <li>해시태그 전략 수립 및 경쟁 계정 벤치마킹</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><span class="tl-period">3-4개월</span></div>
+          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div class="tl-body">
+            <h4>콘텐츠 최적화</h4>
+            <ul>
+              <li>릴스 제작 비중 확대 (60% 이상)</li>
+              <li>타 계정 콜라보, 맞팔 전략 추진</li>
+              <li>인사이트 분석 기반 콘텐츠 지속 개선</li>
+              <li>목표: 계정당 팔로워 3,000명 달성</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><span class="tl-period">5-6개월</span></div>
+          <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div class="tl-body">
+            <h4>광고 준비</h4>
+            <ul>
+              <li>계정당 팔로워 5,000-10,000명 달성 목표</li>
+              <li>첫 바이럴 광고 파일럿 진행 (지인 업체 등)</li>
+              <li>광고 패키지 가격 책정 및 포트폴리오 구축</li>
+              <li>광고주 제안서 및 계약서 양식 준비</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 22: 2차~최종 목표 -->
+  <div class="slide" id="slide-22">
+    <div class="slide-inner">
+      <div class="slide-number-label">06 — 목표 및 로드맵</div>
+      <h2 class="slide-title">2차~최종 목표 — 성장 로드맵</h2>
+      <div class="roadmap-phase">
+        <div class="phase-header">
+          <span class="phase-badge">2차 목표</span>
+          <span class="phase-title">광고 사업 본격화 (6-12개월)</span>
+        </div>
+        <div class="phase-body">
+          <ul>
+            <li>계정당 팔로워 1만명 이상 달성</li>
+            <li>월 광고 건수 10건 이상 확보</li>
+            <li>광고 단가: 피드 1회 30-80만원, 릴스 1회 50-150만원</li>
+            <li>월 매출 목표: <strong>300만원</strong></li>
+          </ul>
+        </div>
+      </div>
+      <div style="width:100%;height:1px;background:#e0e0e0;margin:14px 0;"></div>
+      <div class="roadmap-phase">
+        <div class="phase-header">
+          <span class="phase-badge">3차 목표</span>
+          <span class="phase-title">사업 확장 (12-24개월)</span>
+        </div>
+        <div class="phase-body">
+          <ul>
+            <li>계정 카테고리 추가 (여행, 육아 등) — 총 보유 계정 10개 이상</li>
+            <li>월 매출 목표: <strong>1,000만원</strong></li>
+            <li>직원 1-2명 채용으로 운영 체계화</li>
+          </ul>
+        </div>
+      </div>
+      <div style="width:100%;height:1px;background:#e0e0e0;margin:14px 0;"></div>
+      <div class="roadmap-phase">
+        <div class="phase-header">
+          <span class="phase-badge" style="background:#555;">최종 목표</span>
+          <span class="phase-title">정식 광고 대행사 (24개월~)</span>
+        </div>
+        <div class="phase-body">
+          <ul>
+            <li>보유 채널 30개 이상, 총 팔로워 <strong>100만명+</strong></li>
+            <li>기업 광고주 확보 (대형 F&amp;B, 코스메틱 브랜드)</li>
+            <li>연 매출 <strong>3억원 이상</strong></li>
+            <li>인플루언서 네트워크 구축 및 매칭 플랫폼 운영</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 23: 수익 모델 및 가격 정책 -->
+  <div class="slide" id="slide-23">
+    <div class="slide-inner">
+      <div class="slide-number-label">06 — 수익 모델</div>
+      <h2 class="slide-title">수익 모델 및 가격 정책</h2>
+      <div style="overflow-x:auto; margin-bottom:24px;">
+        <table class="price-table">
+          <thead>
+            <tr>
+              <th style="text-align:left;">패키지</th>
+              <th>내용</th>
+              <th>가격</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>베이직</td>
+              <td>피드 게시물 1회 노출 (1채널)</td>
+              <td>20-50만원</td>
+            </tr>
+            <tr>
+              <td>스탠다드</td>
+              <td>피드+릴스 각 1회 (1채널)</td>
+              <td>50-100만원</td>
+            </tr>
+            <tr>
+              <td>프리미엄</td>
+              <td>3채널 크로스 노출 (피드+릴스)</td>
+              <td>150-300만원</td>
+            </tr>
+            <tr>
+              <td>브랜딩</td>
+              <td>월 정기 운영 (채널 전속 광고)</td>
+              <td>300만원~/월</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card" style="background:#f5f5f5;">
+        <h3 class="card-title" style="margin-bottom:14px;">가격 책정 기준</h3>
+        <div class="card-grid-3" style="gap:12px;">
+          <div style="text-align:center;">
+            <div style="font-size:28px;font-weight:800;color:#111;margin-bottom:4px;">팔로워 수</div>
+            <p style="font-size:13px;color:#555;">채널 팔로워 규모에 따른 노출 단가 산정</p>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:28px;font-weight:800;color:#111;margin-bottom:4px;">도달 범위</div>
+            <p style="font-size:13px;color:#555;">예상 도달 계정 수 및 노출 빈도 고려</p>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:28px;font-weight:800;color:#111;margin-bottom:4px;">제작 포함</div>
+            <p style="font-size:13px;color:#555;">콘텐츠 직접 제작 포함 여부에 따라 추가 산정</p>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:#aaa;margin-top:20px;border-top:1px solid #e0e0e0;padding-top:10px;">출처: 국내 인플루언서 광고 단가 업계 평균 (2024) / 크리에이터 이코노미 리포트 및 인플루언서 에이전시 공개 가격표 참고</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 24: 마무리 -->
+  <div class="slide" id="slide-24">
+    <div class="slide-inner" style="display:flex;align-items:center;justify-content:center;min-height:100vh;">
+      <div class="closing-inner" style="width:100%;">
+        <div style="font-size:12px;font-weight:600;letter-spacing:4px;color:#888;margin-bottom:20px;">CLOSING</div>
+        <h1 style="font-size:clamp(28px, 4vw, 52px);font-weight:800;color:#000;margin-bottom:16px;letter-spacing:-1px;">함께 성장하는 바이럴 파트너</h1>
+        <p style="font-size:16px;color:#555;margin-bottom:40px;">인스타그램 다채널 기반 바이럴 광고 대행</p>
+        <div class="value-props-grid">
+          <div class="value-prop">
+            <div class="value-body">
+              <h4>자체 채널 보유로 즉시 광고 집행 가능</h4>
+              <p>별도 인플루언서 섭외 없이 자사 채널을 통해 즉각적인 광고 진행 — 빠른 실행력과 안정적 노출 보장</p>
+            </div>
+          </div>
+          <div class="value-prop">
+            <div class="value-body">
+              <h4>F&amp;B · 뷰티패션 · 생활꿀팁 3개 카테고리 전문화</h4>
+              <p>각 분야에 특화된 채널로 타겟 오디언스와의 높은 매칭률 — 광고 효율 극대화</p>
+            </div>
+          </div>
+          <div class="value-prop">
+            <div class="value-body">
+              <h4>데이터 기반 성과 측정 및 최적화</h4>
+              <p>인스타그램 인사이트 기반 정기 성과 리포트 제공 — 투명한 광고 효과 측정 및 지속적 개선</p>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:40px;padding-top:24px;border-top:1px solid #e0e0e0;">
+          <p style="font-size:13px;color:#888;">2026 · 인스타그램 바이럴 광고 대행사 사업계획서</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /slides-wrapper -->
+
+<!-- Navigation -->
+<div id="nav">
+  <button class="nav-btn" id="btn-prev" onclick="changeSlide(-1)" title="이전 슬라이드">&#8592;</button>
+  <span id="slide-counter">1 / 24</span>
+  <button class="nav-btn" id="btn-next" onclick="changeSlide(1)" title="다음 슬라이드">&#8594;</button>
+</div>
+
+<script>
+  const TOTAL = 24;
+  let current = 1;
+
+  function goTo(n) {
+    if (n < 1 || n > TOTAL) return;
+    const prev = document.getElementById('slide-' + current);
+    const next = document.getElementById('slide-' + n);
+    if (prev) prev.classList.remove('active');
+    if (next) next.classList.add('active');
+    current = n;
+    document.getElementById('slide-counter').textContent = current + ' / ' + TOTAL;
+    document.getElementById('progress-bar').style.width = (current / TOTAL * 100) + '%';
+    document.getElementById('btn-prev').disabled = current === 1;
+    document.getElementById('btn-next').disabled = current === TOTAL;
+    // scroll to top of slide
+    if (next) next.scrollTop = 0;
+  }
+
+  function changeSlide(dir) { goTo(current + dir); }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   changeSlide(-1);
+  });
+
+  // Touch swipe
+  let touchStartX = 0;
+  document.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', function(e) {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) changeSlide(dx < 0 ? 1 : -1);
+  });
+
+  // Init
+  goTo(1);
+</script>
+</body>
+</html>
